@@ -5,8 +5,10 @@ use colored::*;
 fn main() {
     println!("Guess the number!");
 
-    let secret_number = rand::thread_rng().gen_range(1, 101);
+    let secret_number = rand::thread_rng().gen_range(1..101);
 
+    let mut turns = 3;
+  
     println!("The secret number is: {}", secret_number);
 
     loop {
@@ -27,12 +29,24 @@ fn main() {
         println!("You guessed {}", guess);
     
         match guess.cmp(&secret_number) {
-            Ordering::Less => println!("{}", "Too small.".red()),
-            Ordering::Greater => println!("{}", "Too big.".red()),
+            Ordering::Less => {
+              println!("{}", "Too small.".red());
+              turns -= 1;
+              println!("You have {} turns left.", turns);
+            },
+            Ordering::Greater => {
+              println!("{}", "Too big.".red());
+              turns -= 1;
+              println!("You have {} turns left.", turns);
+            },
             Ordering::Equal => {
                 println!("{}", "You win!".green());
                 break;
             },
+        }
+        if turns == 0 {
+          println!("You lose.");
+          break;
         }
     }
 }
